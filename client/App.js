@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { v4 as uuidv4 } from 'uuid';
+import shortid from 'shortid';
 
 const App = () => {
   const [socket, setSocket] = useState('');
@@ -28,8 +28,8 @@ const App = () => {
     setTasks(tasks);
   };
   const removeTask = (id, isLocal) => {
-    setTasks(tasks => tasks.filter(task => task.id !== id));
-
+    setTasks((tasks) => tasks.filter((task) => task.id !== id));
+    // setTasks(tasks.filter((task) => task.id !== id));
     if (isLocal) {
       socket.emit('removeTask', id);
     }
@@ -41,7 +41,7 @@ const App = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    const id = uuidv4();
+    const id = shortid();
     addTask({ id, task: taskName });
     socket.emit('addTask', { id, task: taskName });
     setTaskName('');
